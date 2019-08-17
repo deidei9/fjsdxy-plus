@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
-	"github.com/pig0224/fjsdxy"
 )
 
 type MainController struct {
