@@ -1,10 +1,11 @@
 package main
 
 import (
+	"github.com/astaxie/beego"
+
+	_ "fjsdxy-plus/helper"
 	_ "fjsdxy-plus/models"
 	_ "fjsdxy-plus/routers"
-
-	"github.com/astaxie/beego"
 )
 
 func main() {
@@ -12,5 +13,6 @@ func main() {
 		beego.BConfig.WebConfig.DirectoryIndex = true
 		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
 	}
+
 	beego.Run()
 }

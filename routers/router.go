@@ -14,21 +14,40 @@ import (
 )
 
 func init() {
-	var apiVersion = beego.AppConfig.String("ApiVersion")
-	ns := beego.NewNamespace(apiVersion,
-		beego.NSNamespace("/login",
+	ns := beego.NewNamespace("/v1",
+		beego.NSNamespace("/wechat",
 			beego.NSInclude(
-				&controllers.LoginController{},
+				&controllers.WechatController{},
 			),
 		),
-		//beego.NSNamespace("/user",
-		//	beego.NSInclude(
-		//		&controllers.UserController{},
-		//	),
-		//),
+		beego.NSNamespace("/user",
+			beego.NSInclude(
+				&controllers.UserController{},
+			),
+		),
+		beego.NSNamespace("/student",
+			beego.NSInclude(
+				&controllers.StudentController{},
+			),
+		),
+		beego.NSNamespace("/week",
+			beego.NSInclude(
+				&controllers.WeekController{},
+			),
+		),
+		beego.NSNamespace("/exam",
+			beego.NSInclude(
+				&controllers.ExamController{},
+			),
+		),
 		beego.NSNamespace("/course",
 			beego.NSInclude(
 				&controllers.CourseController{},
+			),
+		),
+		beego.NSNamespace("/ecard",
+			beego.NSInclude(
+				&controllers.ECardController{},
 			),
 		),
 	)

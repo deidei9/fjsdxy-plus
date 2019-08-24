@@ -5,6 +5,7 @@ type Classes struct {
 	ClassName string    `orm:"size(30)"`
 	College   string    `orm:"size(30)"`
 	Major     string    `orm:"size(30)"`
+	Student   *Student  `orm:"reverse(one)"`
 	Course    []*Course `orm:"reverse(many);on_delete(do_nothing)"`
 	Model
 }

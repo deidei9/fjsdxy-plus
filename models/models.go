@@ -13,9 +13,9 @@ import (
 )
 
 type Model struct {
-	CreateTime string `orm:"auto_now_add;type(datetime)" json:"-"`
-	UpdateTime string `orm:"null;auto_now;type(datetime)" json:"-"`
-	DeleteTime string `orm:"null" json:"-"`
+	CreateTime time.Time `orm:"auto_now_add;type(datetime)" json:"-"`
+	UpdateTime time.Time `orm:"null;auto_now;type(datetime)" json:"-"`
+	DeleteTime time.Time `orm:"null" json:"-"`
 }
 
 func init() {
@@ -56,6 +56,10 @@ func RegisterDB() {
 	}
 }
 
+func DB() orm.Ormer {
+	return orm.NewOrm()
+}
+
 //获取带表前缀的数据表
 //@param            table               数据表
 func GetTable(table string) string {
@@ -72,7 +76,7 @@ func GetTable(table string) string {
 //@return           affected                影响的记录数
 //@return           err                     错误
 func DelByIds(table string, id ...interface{}) (affected int64, err error) {
-	return orm.NewOrm().QueryTable(GetTable(table)).Filter("Id__in", id...).Delete()
+	return DB().QueryTable(GetTable(table)).Filter("Id__in", id...).Delete()
 }
 
 //根据指定的表和id条件更新表字段，不支持批量更新
@@ -83,7 +87,7 @@ func DelByIds(table string, id ...interface{}) (affected int64, err error) {
 //@return           affected                影响的记录数
 //@return           err                     错误
 func UpdateByIds(table string, field string, value interface{}, id ...interface{}) (affected int64, err error) {
-	return orm.NewOrm().QueryTable(GetTable(table)).Filter("Id__in", id...).Update(orm.Params{
+	return DB().QueryTable(GetTable(table)).Filter("Id__in", id...).Update(orm.Params{
 		field: value,
 	})
 }
@@ -96,7 +100,7 @@ func UpdateByIds(table string, field string, value interface{}, id ...interface{
 //@return           affected                影响的记录数
 //@return           err                     错误
 func UpdateByField(table string, data map[string]interface{}, filter string, filterValue ...interface{}) (affected int64, err error) {
-	return orm.NewOrm().QueryTable(GetTable(table)).Filter(filter, filterValue...).Update(data)
+	return DB().QueryTable(GetTable(table)).Filter(filter, filterValue...).Update(data)
 }
 
 //从单表中根据ID获取数据
@@ -107,7 +111,7 @@ func UpdateByField(table string, data map[string]interface{}, filter string, fil
 //@return           err             错误
 func GetById(table string, id int, field ...string) (data orm.Params, err error) {
 	var params []orm.Params
-	_, err = orm.NewOrm().QueryTable(GetTable(table)).Filter("id", id).Limit(1).Values(&params, field...)
+	_, err = DB().QueryTable(GetTable(table)).Filter("id", id).Limit(1).Values(&params, field...)
 	fmt.Println(params)
 	if err == nil {
 		for k, v := range params {
@@ -129,7 +133,7 @@ func GetById(table string, id int, field ...string) (data orm.Params, err error)
 //@return           rows            返回的记录数
 //@return           err             错误
 func GetList(table string, p, listRows int, condition *orm.Condition, orderby ...string) (params []orm.Params, rows int64, err error) {
-	rows, err = orm.NewOrm().QueryTable(GetTable(table)).SetCond(condition).Limit(listRows).Offset((p - 1) * listRows).OrderBy(orderby...).Values(&params)
+	rows, err = DB().QueryTable(GetTable(table)).SetCond(condition).Limit(listRows).Offset((p - 1) * listRows).OrderBy(orderby...).Values(&params)
 	return params, rows, err
 }
 
@@ -249,7 +253,7 @@ func joinOn(table string, usedTables []string, on []map[string]string) (newon []
 //@param            cond            查询条件
 //@return           cnt             统计的记录数
 func Count(table string, cond *orm.Condition) (cnt int64) {
-	cnt, _ = orm.NewOrm().QueryTable(GetTable(table)).SetCond(cond).Count()
+	cnt, _ = DB().QueryTable(GetTable(table)).SetCond(cond).Count()
 	return
 }
 
