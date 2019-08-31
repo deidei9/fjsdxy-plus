@@ -16,6 +16,7 @@ func init() {
 		var skipRouter = []string{
 			apiVersion + "/wechat/login",
 			apiVersion + "/week/pull",
+			apiVersion + "/week/get_today",
 		}
 		if !isSkip(ctx.Request.RequestURI, skipRouter) {
 			token := ctx.Input.Header("Authorization")

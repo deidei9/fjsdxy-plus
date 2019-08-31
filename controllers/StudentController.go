@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fjsdxy-plus/models"
+	"fmt"
 )
 
 //错误代码103xx
@@ -31,9 +32,10 @@ func (this *StudentController) Bind() {
 		this.Error(10301, err.Error())
 	}
 	this.Success("绑定成功", map[string]interface{}{
-		"student_name": student.StudentName,     //班级名称
-		"college":      student.Classes.College, //院系
-		"major":        student.Classes.Major,   //专业
+		"studentName": student.StudentName,       //学生姓名
+		"className":   student.Classes.ClassName, //班级名称
+		"college":     student.Classes.College,   //院系
+		"major":       student.Classes.Major,     //专业
 	})
 }
 
@@ -64,10 +66,12 @@ func (this *StudentController) GetInfo() {
 	if err := student.GetInfo(); err != nil {
 		this.Error(10303, err.Error())
 	}
+	fmt.Println(student.Classes)
 	this.Success("获取成功", map[string]interface{}{
-		"student_name": student.StudentName,     //班级名称
-		"college":      student.Classes.College, //院系
-		"major":        student.Classes.Major,   //专业
+		"studentName": student.StudentName,       //学生姓名
+		"className":   student.Classes.ClassName, //班级名称
+		"college":     student.Classes.College,   //院系
+		"major":       student.Classes.Major,     //专业
 	})
 }
 
@@ -84,9 +88,10 @@ func (this *StudentController) PullInfo() {
 		this.Error(10304, err.Error())
 	}
 	this.Success("更新成功", map[string]interface{}{
-		"student_name": student.StudentName,     //班级名称
-		"college":      student.Classes.College, //院系
-		"major":        student.Classes.Major,   //专业
+		"studentName": student.StudentName,       //学生姓名
+		"className":   student.Classes.ClassName, //班级名称
+		"college":     student.Classes.College,   //院系
+		"major":       student.Classes.Major,     //专业
 	})
 }
 

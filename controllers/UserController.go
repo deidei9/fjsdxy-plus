@@ -26,6 +26,7 @@ func (this *UserController) GetInfo() {
 	student.User = user
 	if err := student.GetInfo(); err == nil {
 		this.Success("获取成功", map[string]interface{}{
+			"userId":   user.Id,
 			"nickName": user.NickName,
 			"avator":   user.Avator,
 			"state":    user.State,
@@ -38,6 +39,7 @@ func (this *UserController) GetInfo() {
 		})
 	}
 	this.Success("获取成功", map[string]interface{}{
+		"userId":       user.Id,
 		"nickName":     user.NickName,
 		"avator":       user.Avator,
 		"state":        user.State,

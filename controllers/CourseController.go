@@ -55,7 +55,7 @@ func (this *CourseController) GetCourse() {
 // @router /get_next [get]
 func (this *CourseController) GetNextClass() {
 	//today := time.Now().Format("2006-01-02")
-	today := "2019-09-05"
+	today := "2019-09-10"
 	week := models.NewWeek()
 	week.Today = today
 	if err := week.GetWeek(); err != nil {
@@ -79,6 +79,7 @@ func (this *CourseController) GetNextClass() {
 	//获取校务课表数据
 	_, err := course.GetCourseHost()
 	if err != nil {
+
 		//获取校务课表数据
 		_, err := course.GetCourse()
 		if err != nil {

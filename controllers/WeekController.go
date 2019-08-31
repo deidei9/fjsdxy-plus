@@ -1,6 +1,10 @@
 package controllers
 
-import "fjsdxy-plus/models"
+import (
+	"fjsdxy-plus/helper"
+	"fjsdxy-plus/models"
+	"time"
+)
 
 //错误代码102xx
 type WeekController struct {
@@ -46,5 +50,18 @@ func (this *WeekController) GetWeek() {
 		"weekly": week.Weekly, //周次
 		"week":   week.Week,   //星期
 		"today":  week.Today,  //日期
+	})
+}
+
+// @Title 当天周历
+// @Description 获取当天周历
+// @Success 200 {string} 获取结果
+// @router /get_today [get]
+func (this *WeekController) GetToday() {
+	today := time.Now().Format("2006-01-02")
+	toweek := time.Now().Weekday()
+	this.Success("获取成功", map[string]interface{}{
+		"week":  helper.GetWeek(toweek), //星期
+		"today": today,                  //日期
 	})
 }

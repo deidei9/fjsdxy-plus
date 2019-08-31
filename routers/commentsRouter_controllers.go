@@ -135,6 +135,15 @@ func init() {
 
 	beego.GlobalControllerRouter["fjsdxy-plus/controllers:WeekController"] = append(beego.GlobalControllerRouter["fjsdxy-plus/controllers:WeekController"],
 		beego.ControllerComments{
+			Method:           "GetToday",
+			Router:           `/get_today`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["fjsdxy-plus/controllers:WeekController"] = append(beego.GlobalControllerRouter["fjsdxy-plus/controllers:WeekController"],
+		beego.ControllerComments{
 			Method:           "Pull",
 			Router:           `/pull/:term`,
 			AllowHTTPMethods: []string{"get"},
