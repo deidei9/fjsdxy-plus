@@ -3,6 +3,7 @@ package controllers
 import (
 	"fjsdxy-plus/helper"
 	"fjsdxy-plus/models"
+	"fmt"
 	"time"
 )
 
@@ -19,7 +20,6 @@ type CourseController struct {
 // @router /get/:date [get]
 func (this *CourseController) GetCourse() {
 	date := this.GetString(":date")
-
 	if date == "" {
 		this.Error(10600, "日期不能为空")
 	}
@@ -54,8 +54,8 @@ func (this *CourseController) GetCourse() {
 // @Success 200 {string} 获取结果
 // @router /get_next [get]
 func (this *CourseController) GetNextClass() {
-	//today := time.Now().Format("2006-01-02")
-	today := "2019-09-10"
+	today := time.Now().Format("2006-01-02")
+	//today := "2019-09-10"
 	week := models.NewWeek()
 	week.Today = today
 	if err := week.GetWeek(); err != nil {
@@ -79,7 +79,6 @@ func (this *CourseController) GetNextClass() {
 	//获取校务课表数据
 	_, err := course.GetCourseHost()
 	if err != nil {
-
 		//获取校务课表数据
 		_, err := course.GetCourse()
 		if err != nil {
@@ -88,24 +87,20 @@ func (this *CourseController) GetNextClass() {
 	}
 	//匹配下节课
 	for _, v := range positon {
+		fmt.Println(v)
 		course.Position = v
 		if err := course.GetNextClass(); err == nil {
 			break
 		}
 	}
-	next := map[string]interface{}{}
 	if course.Id != 0 {
-		next = map[string]interface{}{
+		this.Success("获取成功", map[string]interface{}{
 			"name":    course.Name,
 			"time":    helper.GetClassTime(course.Position),
 			"class":   course.Class,
 			"teacher": course.Teacher,
-		}
+			"weekly":  week.Weekly,
+		})
 	}
-	this.Success("获取成功", map[string]interface{}{
-		"date":   today,
-		"week":   helper.GetWeek(week.Week),
-		"weekly": week.Weekly,
-		"course": next,
-	})
+	this.Error(10606, "今天没有课了")
 }

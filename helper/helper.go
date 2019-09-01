@@ -1,7 +1,6 @@
 package helper
 
 import (
-	"fmt"
 	"strconv"
 	"time"
 )
@@ -15,7 +14,7 @@ func init() {
 
 //Time转换课程表position
 func Time2Pos(week, hour, min int) (position []string) {
-	thisWeek := strconv.Itoa(week + 1)
+	thisWeek := strconv.Itoa(week)
 
 	if hour < 8 {
 		position = []string{thisWeek + "AB", thisWeek + "CD", thisWeek + "EF", thisWeek + "GH", thisWeek + "IJ"}
@@ -68,7 +67,6 @@ func Time2Pos(week, hour, min int) (position []string) {
 //获取上课时间
 func GetClassTime(postion string) (beginTime string) {
 	p := postion[1:len(postion)]
-	fmt.Println(p)
 	switch p {
 	case "AB":
 		beginTime = "8:00-9:35"
@@ -89,20 +87,43 @@ func GetClassTime(postion string) (beginTime string) {
 //获取星期几
 func GetWeek(weekday time.Weekday) (week string) {
 	switch weekday {
-	case 0:
-		week = "星期一"
 	case 1:
-		week = "星期二"
+		week = "星期一"
 	case 2:
-		week = "星期三"
+		week = "星期二"
 	case 3:
-		week = "星期四"
+		week = "星期三"
 	case 4:
-		week = "星期五"
+		week = "星期四"
 	case 5:
-		week = "星期六"
+		week = "星期五"
 	case 6:
+		week = "星期六"
+	case 0:
 		week = "星期天"
+	default:
+		week = ""
+	}
+	return week
+}
+
+//获取周几
+func GetWeek2(weekday time.Weekday) (week string) {
+	switch weekday {
+	case 1:
+		week = "周一"
+	case 2:
+		week = "周二"
+	case 3:
+		week = "周三"
+	case 4:
+		week = "周四"
+	case 5:
+		week = "周五"
+	case 6:
+		week = "周六"
+	case 0:
+		week = "周日"
 	default:
 		week = ""
 	}
