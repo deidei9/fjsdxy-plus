@@ -50,6 +50,11 @@ func init() {
 				&controllers.ECardController{},
 			),
 		),
+		beego.NSNamespace("/leave",
+			beego.NSInclude(
+				&controllers.LeaveController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }

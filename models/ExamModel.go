@@ -1,7 +1,6 @@
 package models
 
 import (
-	"errors"
 	"github.com/pig0224/fjsdxy/jwc"
 	"github.com/pig0224/fjsdxy/jwc/exam"
 )
@@ -22,12 +21,9 @@ func NewExam() *Exam {
 }
 
 //根据学生获取成绩
-func (this *Exam) GetByStu() (num int64, err error) {
-	num, err = DB().QueryTable(GetTable("exam")).Filter("Student__Id", this.Student.Id).All(this)
-	if err != nil {
-		return num, errors.New("获取失败")
-	}
-	return num, nil
+func (this *Exam) GetByStu() (data []Exam, err error) {
+	_, err = DB().QueryTable(GetTable("exam")).Filter("Student__Id", this.Student.Id).All(&data)
+	return data, err
 }
 
 //获取学生成绩数据

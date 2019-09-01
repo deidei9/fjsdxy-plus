@@ -24,14 +24,14 @@ func (this *ExamController) GetInfo() {
 	}
 	exam := models.NewExam()
 	exam.Student = student
-	num, err := exam.GetByStu()
+	data, err := exam.GetByStu()
 	if err != nil {
 		this.Error(10102, err.Error())
 	}
-	if num == 0 {
+	if len(data) == 0 {
 		this.Success("无数据", map[string]interface{}{})
 	}
-	this.Success("获取成功", exam)
+	this.Success("获取成功", data)
 }
 
 // @Title 更新成绩

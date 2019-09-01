@@ -52,6 +52,33 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
+	beego.GlobalControllerRouter["fjsdxy-plus/controllers:LeaveController"] = append(beego.GlobalControllerRouter["fjsdxy-plus/controllers:LeaveController"],
+		beego.ControllerComments{
+			Method:           "Apply",
+			Router:           `/apply`,
+			AllowHTTPMethods: []string{"post"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["fjsdxy-plus/controllers:LeaveController"] = append(beego.GlobalControllerRouter["fjsdxy-plus/controllers:LeaveController"],
+		beego.ControllerComments{
+			Method:           "GetLeave",
+			Router:           `/get_list`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["fjsdxy-plus/controllers:LeaveController"] = append(beego.GlobalControllerRouter["fjsdxy-plus/controllers:LeaveController"],
+		beego.ControllerComments{
+			Method:           "Revokes",
+			Router:           `/revoke/:leaveId`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
 	beego.GlobalControllerRouter["fjsdxy-plus/controllers:StudentController"] = append(beego.GlobalControllerRouter["fjsdxy-plus/controllers:StudentController"],
 		beego.ControllerComments{
 			Method:           "Bind",
