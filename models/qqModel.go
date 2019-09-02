@@ -6,6 +6,7 @@ import (
 	"fjsdxy-plus/helper"
 	"fmt"
 	"github.com/astaxie/beego"
+	"github.com/xlstudio/wxbizdatacrypt"
 	"io/ioutil"
 	"net/http"
 )
@@ -82,26 +83,20 @@ func (this *qq) GetOpenid(code string) error {
 //效验微信用户信息
 func (this *qq) GetInfo(encryptedData, iv string) (err error) {
 
-	aesKey, _ := helper.GetBase64(this.SessionKey)
-	aesIv, _ := helper.GetBase64(iv)
-	aesCipher, _ := helper.GetBase64(encryptedData)
-	result, err := this.decryptData(aesCipher, aesKey, aesIv)
+	appID := beego.AppConfig.String("qq::appid")
+	pc := wxbizdatacrypt.WxBizDataCrypt{AppID: appID, SessionKey: this.SessionKey}
+	result, err := pc.Decrypt(encryptedData, iv, false) //第三个参数解释： 需要返回 JSON 数据类型时 使用 true, 需要返回 map 数据类型时 使用 false
 	if err != nil {
-		return err
+		return errors.New("获取信息失败")
 	}
-	watermark := result["watermark"].(map[string]interface{})
-	appid := watermark["appid"].(string)
-
-	if appid != beego.AppConfig.String("qq::appid") {
-		return nil
-	}
-	this.AvatarUrl = result["avatarUrl"].(string)
-	this.NickName = result["nickName"].(string)
-	this.Gender = result["gender"].(float64)
+	resData := result.(map[string]interface{})
+	this.AvatarUrl = resData["avatarUrl"].(string)
+	this.NickName = resData["nickName"].(string)
+	this.Gender = resData["gender"].(float64)
 
 	if this.User.NickName == "" && this.User.Avator == "" {
-		this.User.NickName = result["nickName"].(string)
-		this.User.Avator = result["avatarUrl"].(string)
+		this.User.NickName = resData["nickName"].(string)
+		this.User.Avator = resData["avatarUrl"].(string)
 	}
 
 	if _, err := DB().Update(this.User); err != nil {

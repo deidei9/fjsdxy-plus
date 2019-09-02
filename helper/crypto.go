@@ -35,7 +35,7 @@ func GetBase64(str string) ([]byte, error) {
 	return encodeString, nil
 }
 
-//微信用户数据AES解密
+//微信用户数据AES解密 =>占位字符原因废弃，使用github.com/xlstudio/wxbizdatacrypt
 func AesDecrypt(crypted, key, iv []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
