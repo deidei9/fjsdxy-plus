@@ -52,6 +52,9 @@ func AesDecrypt(crypted, key, iv []byte) ([]byte, error) {
 	blockMode.CryptBlocks(origData, crypted)
 	//获取的数据尾端有'/x0f'占位符,去除它
 	for i, ch := range origData {
+		if ch == '\x10' {
+			origData[i] = ' '
+		}
 		if ch == '\x0f' {
 			origData[i] = ' '
 		}

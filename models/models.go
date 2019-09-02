@@ -40,6 +40,7 @@ func RegisterDB() {
 		NewExam(),
 		NewWechat(),
 		NewWeek(),
+		NewQQ(),
 	}
 	orm.RegisterModelWithPrefix(beego.AppConfig.DefaultString("db::prefix", "fjsdxy_"), models...)
 	dbUser := beego.AppConfig.String("db::user")

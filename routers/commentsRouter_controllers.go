@@ -79,6 +79,24 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
+	beego.GlobalControllerRouter["fjsdxy-plus/controllers:QQController"] = append(beego.GlobalControllerRouter["fjsdxy-plus/controllers:QQController"],
+		beego.ControllerComments{
+			Method:           "GetInfo",
+			Router:           `/getInfo`,
+			AllowHTTPMethods: []string{"post"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["fjsdxy-plus/controllers:QQController"] = append(beego.GlobalControllerRouter["fjsdxy-plus/controllers:QQController"],
+		beego.ControllerComments{
+			Method:           "Login",
+			Router:           `/login`,
+			AllowHTTPMethods: []string{"post"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
 	beego.GlobalControllerRouter["fjsdxy-plus/controllers:StudentController"] = append(beego.GlobalControllerRouter["fjsdxy-plus/controllers:StudentController"],
 		beego.ControllerComments{
 			Method:           "Bind",

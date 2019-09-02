@@ -20,6 +20,11 @@ func init() {
 				&controllers.WechatController{},
 			),
 		),
+		beego.NSNamespace("/qq",
+			beego.NSInclude(
+				&controllers.QQController{},
+			),
+		),
 		beego.NSNamespace("/user",
 			beego.NSInclude(
 				&controllers.UserController{},

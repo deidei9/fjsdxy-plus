@@ -15,9 +15,11 @@ func init() {
 		var apiVersion = "/" + beego.AppConfig.String("ApiVersion")
 		var skipRouter = []string{
 			apiVersion + "/wechat/login",
+			apiVersion + "/qq/login",
 			apiVersion + "/week/pull",
 			apiVersion + "/week/get_today",
 		}
+
 		if !isSkip(ctx.Request.RequestURI, skipRouter) {
 			token := ctx.Input.Header("Authorization")
 			if helper.CheckToken(token) == "" {

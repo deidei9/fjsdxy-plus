@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-type Wechat struct {
+type qq struct {
 	Id         int     `orm:"auto;pk;index" json:"id"`
 	Openid     string  `orm:"size(255)" json:"openId"`
 	Unionid    string  `orm:"size(255)" json:"unionid"`
@@ -22,19 +22,19 @@ type Wechat struct {
 	Model
 }
 
-func NewWechat() *Wechat {
-	return &Wechat{}
+func NewQQ() *qq {
+	return &qq{}
 }
-func (this *Wechat) Login(code string) error {
+func (this *qq) Login(code string) error {
 	//获取openid
 	_ = this.GetOpenid(code)
 	if this.Openid == "" || this.SessionKey == "" {
 		return errors.New("获取openid失败")
 	}
-	wechat := NewWechat()
-	err := DB().QueryTable(GetTable("wechat")).Filter("openid", this.Openid).RelatedSel().One(wechat)
-	//微信用户未注册，注册用户
-	if wechat.User == nil {
+	qq := NewQQ()
+	err := DB().QueryTable(GetTable("qq")).Filter("openid", this.Openid).RelatedSel().One(qq)
+	//QQ用户未注册，注册用户
+	if qq.User == nil {
 		user := NewUser()
 		user.Phone = ""
 		user.Password = helper.GetMd5("123456")
@@ -49,21 +49,22 @@ func (this *Wechat) Login(code string) error {
 		}
 	} else {
 		//已注册用户，更新sessionKey
-		wechat.SessionKey = this.SessionKey
-		if _, err := DB().Update(wechat); err != nil {
+		qq.SessionKey = this.SessionKey
+		if _, err := DB().Update(qq); err != nil {
 			return errors.New("登录失败")
 		}
-		*this = *wechat
+		*this = *qq
 	}
 
 	return nil
 }
 
 // 从微信服务器获取openid等信息
-func (this *Wechat) GetOpenid(code string) error {
+func (this *qq) GetOpenid(code string) error {
 
 	c := http.Client{}
-	resp, err := c.Get(fmt.Sprintf("https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code", beego.AppConfig.String("wechat::appid"), beego.AppConfig.String("wechat::secret"), code))
+
+	resp, err := c.Get(fmt.Sprintf("https://api.q.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code", beego.AppConfig.String("qq::appid"), beego.AppConfig.String("qq::secret"), code))
 	if err != nil {
 		return err
 	}
@@ -79,7 +80,8 @@ func (this *Wechat) GetOpenid(code string) error {
 }
 
 //效验微信用户信息
-func (this *Wechat) GetInfo(encryptedData, iv string) (err error) {
+func (this *qq) GetInfo(encryptedData, iv string) (err error) {
+
 	aesKey, _ := helper.GetBase64(this.SessionKey)
 	aesIv, _ := helper.GetBase64(iv)
 	aesCipher, _ := helper.GetBase64(encryptedData)
@@ -89,7 +91,8 @@ func (this *Wechat) GetInfo(encryptedData, iv string) (err error) {
 	}
 	watermark := result["watermark"].(map[string]interface{})
 	appid := watermark["appid"].(string)
-	if appid != beego.AppConfig.String("wechat::appid") {
+
+	if appid != beego.AppConfig.String("qq::appid") {
 		return nil
 	}
 	this.AvatarUrl = result["avatarUrl"].(string)
@@ -100,6 +103,7 @@ func (this *Wechat) GetInfo(encryptedData, iv string) (err error) {
 		this.User.NickName = result["nickName"].(string)
 		this.User.Avator = result["avatarUrl"].(string)
 	}
+
 	if _, err := DB().Update(this.User); err != nil {
 		return errors.New("获取信息失败")
 	}
@@ -109,8 +113,8 @@ func (this *Wechat) GetInfo(encryptedData, iv string) (err error) {
 	return nil
 }
 
-//微信加密数据解密
-func (this *Wechat) decryptData(aesCipher, aesKey, aesIv []byte) (map[string]interface{}, error) {
+//QQ加密数据解密
+func (this *qq) decryptData(aesCipher, aesKey, aesIv []byte) (map[string]interface{}, error) {
 	data := make(map[string]interface{})
 	var err error
 	var result []byte
@@ -119,7 +123,9 @@ func (this *Wechat) decryptData(aesCipher, aesKey, aesIv []byte) (map[string]int
 	}
 
 	if err = json.Unmarshal(result, &data); err != nil {
+		fmt.Println(err)
 		return nil, errors.New("获取信息失败")
 	}
+
 	return data, nil
 }
