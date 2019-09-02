@@ -129,3 +129,12 @@ func GetWeek2(weekday time.Weekday) (week string) {
 	}
 	return week
 }
+
+//判断是否在校务系统开放时间内
+func IsOpenSchool() bool {
+	hour := time.Now().Hour()
+	if hour >= 6 {
+		return true
+	}
+	return false
+}

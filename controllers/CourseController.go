@@ -54,6 +54,10 @@ func (this *CourseController) GetCourse() {
 // @Success 200 {string} 获取结果
 // @router /get_next [get]
 func (this *CourseController) GetNextClass() {
+	//判断是否在查询范围内
+	if helper.IsOpenSchool() == false {
+		this.Error(10603, "不在校务系统开放时间内")
+	}
 	today := time.Now().Format("2006-01-02")
 	//today := "2019-09-10"
 	week := models.NewWeek()
