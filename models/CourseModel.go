@@ -47,7 +47,7 @@ func (this *Course) GetCourse() (data []Course, err error) {
 			Classes:  Classes,
 		}
 		//判断课程是否保存本地
-		if err = DB().QueryTable(GetTable("course")).Filter("Term", this.Term).Filter("Weekly", this.Weekly).Filter("Name", v.Name).Filter("Position", v.Position).Filter("Class", v.Class).Filter("Teacher", v.Teacher).One(this); err != nil {
+		if err = DB().QueryTable(GetTable("course")).Filter("Classes__Id", Classes.Id).Filter("Term", this.Term).Filter("Weekly", this.Weekly).Filter("Name", v.Name).Filter("Position", v.Position).Filter("Class", v.Class).Filter("Teacher", v.Teacher).One(this); err != nil {
 			courseData = append(courseData, course)
 		}
 	}
