@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"fjsdxy-plus/models"
-	"fmt"
 )
 
 //错误代码103xx
@@ -66,7 +65,6 @@ func (this *StudentController) GetInfo() {
 	if err := student.GetInfo(); err != nil {
 		this.Error(10303, err.Error())
 	}
-	fmt.Println(student.Classes)
 	this.Success("获取成功", map[string]interface{}{
 		"studentName": student.StudentName,       //学生姓名
 		"className":   student.Classes.ClassName, //班级名称

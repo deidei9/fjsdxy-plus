@@ -3,7 +3,6 @@ package controllers
 import (
 	"fjsdxy-plus/helper"
 	"fjsdxy-plus/models"
-	"fmt"
 	"time"
 )
 
@@ -28,6 +27,7 @@ func (this *CourseController) GetCourse() {
 	course.Classes.Student = models.NewStudent()
 	course.Classes.Student.User = models.NewUser()
 	course.Classes.Student.User.Id = this.UserId
+
 	//获取当前学期
 	week := models.NewWeek()
 	if err := models.DB().QueryTable(models.GetTable("week")).Filter("today", date).One(week, "Term", "Weekly"); err != nil {
@@ -80,7 +80,7 @@ func (this *CourseController) GetNextClass() {
 	course.Classes.Student.User.Id = this.UserId
 	course.Term = week.Term
 	course.Weekly = int(week.Weekly)
-	//获取校务课表数据
+	//获取本地课表数据
 	_, err := course.GetCourseHost()
 	if err != nil {
 		//获取校务课表数据
@@ -91,7 +91,6 @@ func (this *CourseController) GetNextClass() {
 	}
 	//匹配下节课
 	for _, v := range positon {
-		fmt.Println(v)
 		course.Position = v
 		if err := course.GetNextClass(); err == nil {
 			break

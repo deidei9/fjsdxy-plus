@@ -25,6 +25,7 @@ func NewCourse() *Course {
 func (this *Course) GetCourse() (data []Course, err error) {
 	//登录CAS
 	c, err := this.Classes.Student.LoginCAS()
+
 	if err != nil {
 		return nil, err
 	}
@@ -34,6 +35,7 @@ func (this *Course) GetCourse() (data []Course, err error) {
 		return nil, err
 	}
 	var courseData []Course
+	Classes := this.Classes
 	for _, v := range result {
 		course := Course{
 			Term:     this.Term,
@@ -42,15 +44,15 @@ func (this *Course) GetCourse() (data []Course, err error) {
 			Position: v.Position,
 			Class:    v.Class,
 			Teacher:  v.Teacher,
-			Classes:  this.Classes,
+			Classes:  Classes,
 		}
-		//判断是否课程是否保存本地
+		//判断课程是否保存本地
 		if err = DB().QueryTable(GetTable("course")).Filter("Term", this.Term).Filter("Weekly", this.Weekly).Filter("Name", v.Name).Filter("Position", v.Position).Filter("Class", v.Class).Filter("Teacher", v.Teacher).One(this); err != nil {
 			courseData = append(courseData, course)
 		}
 	}
 	if _, err = DB().InsertMulti(100, courseData); err != nil {
-		return nil, errors.New("获取课程表失败123")
+		return nil, errors.New("获取课程表失败")
 	}
 	if num, _ := DB().QueryTable(GetTable("course")).Filter("Classes__Id", this.Classes.Id).Filter("Term", this.Term).Filter("Weekly", this.Weekly).All(&data, "Id", "Weekly", "Name", "Position", "Class", "Teacher"); num == 0 {
 		return nil, errors.New("课程表查询失败")
