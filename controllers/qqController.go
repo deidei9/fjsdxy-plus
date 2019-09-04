@@ -57,5 +57,6 @@ func (this *QQController) GetInfo() {
 	if err := qq.GetInfo(encryptedData, iv); err != nil {
 		this.Error(10505, "获取用户信息失败")
 	}
+
 	this.Success("获取成功", qq)
 }

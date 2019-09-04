@@ -42,7 +42,6 @@ func (this *qq) Login(code string) error {
 		user.NickName = this.NickName
 		user.Avator = this.AvatarUrl
 		this.User = user
-		fmt.Println(this.User.State)
 		_, err = DB().Insert(this.User)
 		_, err = DB().Insert(this)
 		if err != nil {
@@ -82,14 +81,15 @@ func (this *qq) GetOpenid(code string) error {
 
 //效验微信用户信息
 func (this *qq) GetInfo(encryptedData, iv string) (err error) {
-
 	appID := beego.AppConfig.String("qq::appid")
 	pc := wxbizdatacrypt.WxBizDataCrypt{AppID: appID, SessionKey: this.SessionKey}
 	result, err := pc.Decrypt(encryptedData, iv, false) //第三个参数解释： 需要返回 JSON 数据类型时 使用 true, 需要返回 map 数据类型时 使用 false
 	if err != nil {
+		helper.Logger.Error(err.Error())
 		return errors.New("获取信息失败")
 	}
 	resData := result.(map[string]interface{})
+
 	this.AvatarUrl = resData["avatarUrl"].(string)
 	this.NickName = resData["nickName"].(string)
 	this.Gender = resData["gender"].(float64)
@@ -100,9 +100,11 @@ func (this *qq) GetInfo(encryptedData, iv string) (err error) {
 	}
 
 	if _, err := DB().Update(this.User); err != nil {
+		helper.Logger.Error(err.Error())
 		return errors.New("获取信息失败")
 	}
 	if _, err := DB().Update(this); err != nil {
+		helper.Logger.Error(err.Error())
 		return errors.New("获取信息失败")
 	}
 	return nil
@@ -114,11 +116,12 @@ func (this *qq) decryptData(aesCipher, aesKey, aesIv []byte) (map[string]interfa
 	var err error
 	var result []byte
 	if result, err = helper.AesDecrypt(aesCipher, aesKey, aesIv); err != nil {
+		helper.Logger.Error(err.Error())
 		return nil, errors.New("解密失败")
 	}
 
 	if err = json.Unmarshal(result, &data); err != nil {
-		fmt.Println(err)
+		helper.Logger.Error(err.Error())
 		return nil, errors.New("获取信息失败")
 	}
 

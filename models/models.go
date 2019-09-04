@@ -271,7 +271,7 @@ func CheckDatabaseIsExist(host string, port int, username, password, database st
 		timeout = make(chan bool, 1)
 	)
 	go func() {
-		if db, err = sql.Open("mysql", fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8",
+		if db, err = sql.Open("mysql", fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4",
 			username, password, host, port, database,
 		)); err == nil {
 			err = db.Ping()
