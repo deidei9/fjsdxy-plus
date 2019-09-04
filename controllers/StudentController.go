@@ -17,6 +17,7 @@ type StudentController struct {
 // @Success 200 {string} 绑定结果&学生信息
 // @router /bind [post]
 func (this *StudentController) Bind() {
+
 	studenId := this.GetString("studentId")
 	password := this.GetString("password")
 	if studenId == "" || password == "" {

@@ -13,6 +13,9 @@ const (
 
 	DEFAULT_STATIC_EXT    = ".txt,.html,.ico,.jpeg,.png,.gif,.xml"
 	DEFAULT_COOKIE_SECRET = "fjsdxy"
+
+	WEIXIN = "wechat"
+	QQ     = "qq"
 )
 
 var (

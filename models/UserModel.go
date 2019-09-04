@@ -1,6 +1,9 @@
 package models
 
-import "errors"
+import (
+	"errors"
+	"fjsdxy-plus/helper"
+)
 
 type User struct {
 	Id       int     `orm:"auto;pk;index" json:"id"`
@@ -22,4 +25,20 @@ func (this *User) GetInfo() (err error) {
 		return errors.New("用户不存在")
 	}
 	return nil
+}
+
+//判断用户来源
+func (this *User) UserFrom() string {
+	userId := this.Id
+	//判断微信用户
+	wechat := NewWechat()
+	if err := DB().QueryTable(GetTable("wechat")).Filter("User__Id", userId).RelatedSel().One(wechat); err == nil {
+		return helper.WEIXIN
+	}
+	//判断微信用户
+	qq := NewQQ()
+	if err := DB().QueryTable(GetTable("qq")).Filter("User__Id", userId).RelatedSel().One(qq); err == nil {
+		return helper.QQ
+	}
+	return helper.WEIXIN
 }

@@ -64,8 +64,15 @@ func (this *Student) Bind() (err error) {
 	if err := DB().Read(this.User); err != nil {
 		return errors.New("未登录")
 	}
-	if err = DB().Read(this, "StudentId"); err == nil {
-		return errors.New("学号已被绑定")
+	//判断用户来源
+	userFrom := this.User.UserFrom()
+	oldStudent := NewStudent()
+	if err = DB().QueryTable(GetTable("student")).Filter("StudentId", this.StudentId).RelatedSel().One(oldStudent); err == nil {
+		//判断已绑定的用户来源
+		oldUserFrom := oldStudent.User.UserFrom()
+		if userFrom == oldUserFrom { //重复绑定
+			return errors.New("学号已被绑定")
+		}
 	}
 	if _, err = this.LoginSSO(); err != nil {
 		return err
@@ -75,7 +82,7 @@ func (this *Student) Bind() (err error) {
 		return err
 	}
 	//学号和用户绑定
-	if err = DB().Read(this, "StudentId"); err != nil {
+	if err = DB().QueryTable(GetTable("student")).Filter("User__Id", this.User.Id).RelatedSel().One(this); err != nil {
 		//第一次绑定
 		if _, err = DB().Insert(this); err != nil {
 			return errors.New("绑定失败")
