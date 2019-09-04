@@ -46,3 +46,19 @@ func (this *UserController) GetInfo() {
 		"student_info": "", //未绑定学号
 	})
 }
+
+// @Title 审核状态
+// @Description 获取小程序审核状态
+// @Param platform path string true "审核平台"
+// @Success 200 {string} 审核状态
+// @router /support/:platform [get]
+func (this *UserController) GetCheck() {
+	platform := this.GetString(":platform")
+	if platform == "" {
+		this.Error(10600, "平台不能为空")
+	}
+	isCheck := models.NewConfig().GetConfigBool(platform, "isCheck", false)
+	this.Success("操作成功", map[string]interface{}{
+		"state": isCheck,
+	})
+}

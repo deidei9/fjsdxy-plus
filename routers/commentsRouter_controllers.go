@@ -151,6 +151,15 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
+	beego.GlobalControllerRouter["fjsdxy-plus/controllers:UserController"] = append(beego.GlobalControllerRouter["fjsdxy-plus/controllers:UserController"],
+		beego.ControllerComments{
+			Method:           "GetCheck",
+			Router:           `/support/:platform`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
 	beego.GlobalControllerRouter["fjsdxy-plus/controllers:WechatController"] = append(beego.GlobalControllerRouter["fjsdxy-plus/controllers:WechatController"],
 		beego.ControllerComments{
 			Method:           "GetInfo",

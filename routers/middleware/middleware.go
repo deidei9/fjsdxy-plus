@@ -18,6 +18,7 @@ func init() {
 			apiVersion + "/qq/login",
 			apiVersion + "/week/pull",
 			apiVersion + "/week/get_today",
+			apiVersion + "/user/support",
 		}
 
 		if !isSkip(ctx.Request.RequestURI, skipRouter) {

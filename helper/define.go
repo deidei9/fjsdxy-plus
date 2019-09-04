@@ -3,10 +3,7 @@ package helper
 
 import (
 	"github.com/astaxie/beego"
-	"sync"
 )
-
-type ConfigCate string
 
 const (
 	//fjsdxy-plus Version
@@ -21,6 +18,4 @@ const (
 var (
 	//develop mode
 	Debug = beego.AppConfig.String("runmode") == "dev"
-	//配置文件的全局map
-	ConfigMap sync.Map
 )
