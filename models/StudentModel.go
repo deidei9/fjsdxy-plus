@@ -110,7 +110,7 @@ func (this *Student) UnBind() (err error) {
 //绑定学生信息&更新学生信息
 func (this *Student) BindInfo() (err error) {
 	//登录教务处
-	c, err := this.LoginJWC()
+	c, err := this.LoginCAS()
 	if err != nil {
 		return err
 	}
