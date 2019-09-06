@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fjsdxy-plus/helper"
 	"github.com/gocolly/colly"
 	sy "github.com/pig0224/fjsdxy"
 	"github.com/pig0224/fjsdxy/cas"
@@ -29,7 +30,8 @@ func NewStudent() *Student {
 
 //登录SSO
 func (this *Student) LoginSSO() (c *colly.Collector, err error) {
-	if c, err = sy.SSO_Login(this.StudentId, this.Password); err != nil {
+	password := helper.CheckToken(this.Password)
+	if c, err = sy.SSO_Login(this.StudentId, password); err != nil {
 		return nil, errors.New("校务系统出错，请稍后再试")
 	}
 	return c, nil
@@ -37,7 +39,8 @@ func (this *Student) LoginSSO() (c *colly.Collector, err error) {
 
 //登录CAS
 func (this *Student) LoginCAS() (c *colly.Collector, err error) {
-	if c, err = cas.Login(this.StudentId, this.Password); err != nil {
+	password := helper.CheckToken(this.Password)
+	if c, err = cas.Login(this.StudentId, password); err != nil {
 		return nil, errors.New("校务系统出错，请稍后再试")
 	}
 	return c, nil
@@ -45,7 +48,8 @@ func (this *Student) LoginCAS() (c *colly.Collector, err error) {
 
 //登录教务处
 func (this *Student) LoginJWC() (c *colly.Collector, err error) {
-	if c, err = jwc.Login(this.StudentId, this.Password); err != nil {
+	password := helper.CheckToken(this.Password)
+	if c, err = jwc.Login(this.StudentId, password); err != nil {
 		return nil, errors.New("校务系统出错，请稍后再试")
 	}
 	return c, nil
@@ -53,7 +57,8 @@ func (this *Student) LoginJWC() (c *colly.Collector, err error) {
 
 //登录学工处
 func (this *Student) LoginXG() (c *colly.Collector, err error) {
-	if c, err = xg.Login(this.StudentId, this.Password); err != nil {
+	password := helper.CheckToken(this.Password)
+	if c, err = xg.Login(this.StudentId, password); err != nil {
 		return nil, errors.New("校务系统出错，请稍后再试")
 	}
 	return c, nil

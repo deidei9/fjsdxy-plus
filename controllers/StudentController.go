@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fjsdxy-plus/helper"
 	"fjsdxy-plus/models"
 )
 
@@ -19,7 +20,7 @@ type StudentController struct {
 func (this *StudentController) Bind() {
 
 	studenId := this.GetString("studentId")
-	password := this.GetString("password")
+	password := helper.GenToken(this.GetString("password"))
 	if studenId == "" || password == "" {
 		this.Error(10300, "学号或者密码不能为空")
 	}

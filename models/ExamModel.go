@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fjsdxy-plus/helper"
 	"github.com/pig0224/fjsdxy/jwc"
 	"github.com/pig0224/fjsdxy/jwc/exam"
 )
@@ -29,7 +30,7 @@ func (this *Exam) GetByStu() (data []Exam, err error) {
 //获取学生成绩数据
 func (this *Exam) PullExam() (num int64, err error) {
 	studentId := this.Student.StudentId
-	pass := this.Student.Password
+	pass := helper.CheckToken(this.Student.Password)
 	c, err := jwc.Login(studentId, pass)
 	if err != nil {
 		return 0, err
